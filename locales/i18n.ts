@@ -5,7 +5,7 @@ import * as Localization from 'expo-localization';
 import en_US from "./en_US.json";
 import zh_CN from "./zh_CN.json";
 
-const lang = Localization.getLocales()[0].languageCode ?? "en";
+const lang = Localization.getLocales()[0]?.languageCode ?? "en";
 
 export const resources = {
       en: en_US,

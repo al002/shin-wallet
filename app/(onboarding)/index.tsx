@@ -1,11 +1,15 @@
 import { Button } from "@/components/Button";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { H2, Paragraph, Separator, YStack } from "tamagui";
+import { H2, H3, Paragraph, Separator, Sheet, YStack } from "tamagui";
+import Ionicons from "@expo/vector-icons/Ionicons"
 
 export default function Onboarding() {
   const router = useRouter();
   const { t } = useTranslation();
+  const [open, setOpen] = useState<boolean>(false);
+  const [position, setPosition] = useState<number>(0);
 
   return (
     <YStack flex={1} justifyContent="flex-end" padding="$6" gap="$4">
@@ -36,11 +40,42 @@ export default function Onboarding() {
         <Button
           variant="outlined"
           chromeless
-          // onPress={() => router.push('/(onboarding)/import')}
+          onPress={() => setOpen(true)}
         >
           {t("alreadyHaveWallet")}
         </Button>
       </YStack>
+
+      <Sheet
+        modal={true}
+        open={open}
+        snapPointsMode="constant"
+        snapPoints={[300]}
+        position={position}
+        dismissOnSnapToBottom
+        zIndex={100_000}
+        onOpenChange={setOpen}
+        onPositionChange={setPosition}
+      >
+        <Sheet.Overlay
+          opacity={0.8}
+          animation="lazy"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+        <Sheet.Frame padding="$5" justifyContent="center" alignItems="center" gap="$4">
+          <H3>Import Options</H3>
+          <Paragraph textAlign="center" color="$colorMuted">
+            Import an existing wallet with your seed phrase or private key
+          </Paragraph>
+          <Button icon={<Ionicons name="copy-outline" />} size="$4" themeInverse width="100%">
+            Import Seed Phrase
+          </Button>
+          <Button icon={<Ionicons name="key-outline" />} size="$4" themeInverse width="100%">
+            Import Private Key
+          </Button>
+        </Sheet.Frame>
+      </Sheet>
     </YStack>
   );
 }
