@@ -1,0 +1,8 @@
+{
+  "translation": {
+    "welcomeTitle": "Welcome to Shin",
+    "welcomeDesc": "To get started, create a new wallet or import an existing one.",
+    "createNewWallet": "Create new wallet",
+    "alreadyHaveWallet": "I already have a wallet"
+  }
+}

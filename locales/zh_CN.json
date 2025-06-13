@@ -1,0 +1,8 @@
+{
+  "translation": {
+    "welcomeTitle": "欢迎使用 Shin",
+    "welcomeDesc": "创建新的钱包或导入已有钱包。",
+    "createNewWallet": "创建新的钱包",
+    "alreadyHaveWallet": "我已有钱包"
+  }
+}

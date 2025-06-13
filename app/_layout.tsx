@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { TamaguiProvider } from "tamagui";
 import appConfig from "@/tamagui.config";
 import { useWalletStore } from "@/store/wallet";
+import "@/locales/i18n";
 
 SplashScreen.preventAutoHideAsync();
 
