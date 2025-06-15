@@ -3,6 +3,20 @@
     "welcomeTitle": "Welcome to Shin",
     "welcomeDesc": "To get started, create a new wallet or import an existing one.",
     "createNewWallet": "Create new wallet",
-    "alreadyHaveWallet": "I already have a wallet"
+    "alreadyHaveWallet": "I already have a wallet",
+    "common": {
+      "next": "Next"
+    },
+    "onboarding": {
+      "importOptions": "Import Options",
+      "importDesc": "Import an existing wallet with your seed phrase or private key",
+      "importSeedPhrase": "Import Seed Phrase",
+      "importPrivateKey": "Import Private Key",
+
+      "mnemonic": {
+        "title": "Recovery Phrase",
+        "subTitle": ""
+      }
+    }
   }
 }

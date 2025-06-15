@@ -3,6 +3,20 @@
     "welcomeTitle": "欢迎使用 Shin",
     "welcomeDesc": "创建新的钱包或导入已有钱包。",
     "createNewWallet": "创建新的钱包",
-    "alreadyHaveWallet": "我已有钱包"
+    "alreadyHaveWallet": "我已有钱包",
+    "common": {
+      "next": "下一步"
+    },
+    "onboarding": {
+      "importOptions": "导入选项",
+      "importDesc": "使用助记词或私钥导入已有的钱包",
+      "importSeedPhrase": "导入助记词",
+      "importPrivateKey": "导入私钥",
+
+      "mnemonic": {
+        "title": "助记词",
+        "subTitle": ""
+      }
+    }
   }
 }

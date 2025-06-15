@@ -32,7 +32,7 @@ export default function Onboarding() {
       <YStack gap="$3">
         <Button
           theme="primary"
-          // onPress={() => router.push('/(onboarding)/create')}
+          onPress={() => router.push('/(onboarding)/mnemonic')}
         >
           {t("createNewWallet")}
         </Button>
@@ -64,15 +64,15 @@ export default function Onboarding() {
           exitStyle={{ opacity: 0 }}
         />
         <Sheet.Frame padding="$5" justifyContent="center" alignItems="center" gap="$4">
-          <H3>Import Options</H3>
+          <H3>{t("onboarding.importOptions")}</H3>
           <Paragraph textAlign="center" color="$colorMuted">
-            Import an existing wallet with your seed phrase or private key
+            {t("onboarding.importDesc")}
           </Paragraph>
           <Button icon={<Ionicons name="copy-outline" />} size="$4" themeInverse width="100%">
-            Import Seed Phrase
+            {t("onboarding.importSeedPhrase")}
           </Button>
           <Button icon={<Ionicons name="key-outline" />} size="$4" themeInverse width="100%">
-            Import Private Key
+            {t("onboarding.importPrivateKey")}
           </Button>
         </Sheet.Frame>
       </Sheet>
