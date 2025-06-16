@@ -15,7 +15,8 @@
 
       "mnemonic": {
         "title": "助记词",
-        "subTitle": ""
+        "subTitle": "你只能通过助记词恢复钱包，请将其保存在安全的地方",
+        "copyToClipboard": "复制到剪贴板"
       }
     }
   }

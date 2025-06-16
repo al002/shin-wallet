@@ -15,7 +15,8 @@
 
       "mnemonic": {
         "title": "Recovery Phrase",
-        "subTitle": ""
+        "subTitle": "You can only recover your account by those phrases. Please sotre it somewhere safe.",
+        "copyToClipboard": "Copy to clipboard"
       }
     }
   }

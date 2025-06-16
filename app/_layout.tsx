@@ -59,8 +59,8 @@ export default function RootLayout() {
   return (
     <TamaguiProvider config={appConfig} defaultTheme="dark">
       <ThemeProvider value={DarkTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(onboarding)" />
+        <Stack>
+          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="light" />
       </ThemeProvider>
