@@ -23,7 +23,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="mnemonic/index" options={mnemonicScreenOptions} />
       <Stack.Screen
-        name="mnemonic/enable-biometrics"
+        name="mnemonic/biometrics"
         options={mnemonicScreenOptions}
       />
     </Stack>

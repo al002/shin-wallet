@@ -5,18 +5,25 @@
     "createNewWallet": "Create new wallet",
     "alreadyHaveWallet": "I already have a wallet",
     "common": {
-      "next": "Next"
+      "next": "Next",
+      "copied": "Copied"
     },
     "onboarding": {
       "importOptions": "Import Options",
       "importDesc": "Import an existing wallet with your seed phrase or private key",
       "importSeedPhrase": "Import Seed Phrase",
       "importPrivateKey": "Import Private Key",
-
       "mnemonic": {
         "title": "Recovery Phrase",
         "subTitle": "You can only recover your account by those phrases. Please sotre it somewhere safe.",
-        "copyToClipboard": "Copy to clipboard"
+        "copyToClipboard": "Copy to clipboard",
+
+        "biometrics": {
+          "title": "Secure Your Wallet",
+          "subTitle": "Use biometrics for quick and secure access. You can change this later in settings.",
+          "enableSwitchLabel": "Enable Biometric Unlock",
+          "finish": "Finish Setup"
+        }
       }
     }
   }

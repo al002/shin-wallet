@@ -1,20 +1,52 @@
 import { Button } from "@/components/Button";
 import { generate } from "@/utils/mnemonic";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { H2, Input, Paragraph, XStack, YStack } from "tamagui";
+import * as Clipboard from "expo-clipboard";
+import { useRouter } from "expo-router";
 
-export default function ShowMnemonic() {
+export default function Mnemonic() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [mnemonic, setMnemoic] = useState<string[]>([]);
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     setMnemoic(generate());
+    const timeout = timeoutRef.current;
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, []);
 
+  const copyToClipboard = async () => {
+    if (copied) {
+      return;
+    }
+
+    await Clipboard.setStringAsync(mnemonic.join(" "));
+    setCopied(true);
+
+    timeoutRef.current = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
   return (
-    <YStack gap="$4" padding="$4" alignItems="center" flex={1} backgroundColor="$background">
+    <YStack
+      gap="$4"
+      padding="$4"
+      alignItems="center"
+      flex={1}
+      backgroundColor="$background"
+    >
       <YStack alignItems="center">
         <H2>{t("onboarding.mnemonic.title")}</H2>
         <Paragraph margin="$2" textAlign="center" color="$colorMuted">
@@ -33,15 +65,22 @@ export default function ShowMnemonic() {
           marginTop="$3"
           variant="outlined"
           chromeless
-          icon={<Ionicons name="copy-outline" />}
+          icon={!copied ? <Ionicons name="copy-outline" /> : null}
           size="$4"
+          onPress={copyToClipboard}
         >
-          {t("onboarding.mnemonic.copyToClipboard")}
+          {!copied
+            ? t("onboarding.mnemonic.copyToClipboard")
+            : t("common.copied")}
         </Button>
       </YStack>
 
       <YStack width="100%" marginBottom="$4">
-        <Button theme="primary" width="100%">
+        <Button
+          theme="primary"
+          width="100%"
+          onPress={() => router.push("/(onboarding)/mnemonic/protect-config")}
+        >
           {t("common.next")}
         </Button>
       </YStack>
