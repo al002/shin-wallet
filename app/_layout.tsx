@@ -1,7 +1,4 @@
-import {
-  DarkTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
@@ -16,7 +13,8 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const segments = useSegments();
   const router = useRouter();
-  const { isHydrated, hasWallet, checkAnHydrate } = useWalletStore();
+  const { isHydrated, hasWallet, isUnlocked, checkAndHydrate } =
+    useWalletStore();
 
   const [fontsLoaded, fontsError] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
@@ -24,8 +22,8 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    checkAnHydrate();
-  }, [checkAnHydrate]);
+    checkAndHydrate();
+  }, [checkAndHydrate]);
 
   useEffect(() => {
     const assetsReady = fontsLoaded || fontsError;
@@ -40,19 +38,36 @@ export default function RootLayout() {
     }
 
     const inOnboardingGroup = segments[0] === "(onboarding)";
-    if (hasWallet && inOnboardingGroup) {
-      // router.replace("/(tabs)/wallet");
-    } else if (!hasWallet && !inOnboardingGroup) {
-      router.replace("/(onboarding)");
+    const onUnlockScreen = segments[0] === "unlock";
+
+    if (!hasWallet) {
+      if (!inOnboardingGroup) {
+        router.replace("/(onboarding)");
+      }
+    } else {
+      if (!isUnlocked) {
+        if (!onUnlockScreen) {
+          router.replace("/unlock");
+        }
+      } else {
+        if (inOnboardingGroup || onUnlockScreen) {
+          router.replace("/(tabs)/wallet");
+        }
+      }
     }
 
     SplashScreen.hideAsync();
-  }, [fontsLoaded, fontsError, isHydrated, hasWallet, segments, router]);
+  }, [
+    fontsLoaded,
+    fontsError,
+    isHydrated,
+    hasWallet,
+    isUnlocked,
+    segments,
+    router,
+  ]);
 
-  const assetsReady = fontsLoaded || fontsError;
-  const isAppReady = assetsReady && isHydrated;
-
-  if (!isAppReady) {
+  if (!isHydrated || (!fontsLoaded && !fontsError)) {
     return null;
   }
 
@@ -61,6 +76,7 @@ export default function RootLayout() {
       <ThemeProvider value={DarkTheme}>
         <Stack>
           <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="light" />
       </ThemeProvider>

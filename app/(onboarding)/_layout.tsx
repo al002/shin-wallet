@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { useTheme } from "tamagui";
+import { OnboardingContext } from "./context";
 
 if (global.crypto == null) {
   global.crypto = require("expo-crypto");
@@ -19,13 +20,19 @@ export default function OnboardingLayout() {
   };
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="mnemonic/index" options={mnemonicScreenOptions} />
-      <Stack.Screen
-        name="mnemonic/biometrics"
-        options={mnemonicScreenOptions}
-      />
-    </Stack>
+    <OnboardingContext
+      value={{
+        tempMnemonic: "",
+      }}
+    >
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="mnemonic/index" options={mnemonicScreenOptions} />
+        <Stack.Screen
+          name="mnemonic/biometrics"
+          options={mnemonicScreenOptions}
+        />
+      </Stack>
+    </OnboardingContext>
   );
 }

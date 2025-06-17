@@ -25,6 +25,9 @@
           "finish": "Finish Setup"
         }
       }
+    },
+    "unlock": {
+      "unlock": "Unlock"
     }
   }
 }

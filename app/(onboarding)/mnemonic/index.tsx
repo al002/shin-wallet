@@ -6,10 +6,12 @@ import { useTranslation } from "react-i18next";
 import { H2, Input, Paragraph, XStack, YStack } from "tamagui";
 import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
+import { useOnboardingContext } from "../context";
 
 export default function Mnemonic() {
   const { t } = useTranslation();
   const router = useRouter();
+  const onboardingContext = useOnboardingContext();
   const [mnemonic, setMnemoic] = useState<string[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
 
@@ -37,6 +39,15 @@ export default function Mnemonic() {
     timeoutRef.current = setTimeout(() => {
       setCopied(false);
     }, 2000);
+  };
+
+  const toBiometrics = () => {
+    if (!mnemonic.length) {
+      return;
+    }
+
+    onboardingContext.tempMnemonic = mnemonic.join(" ");
+    router.push("/(onboarding)/mnemonic/biometrics")
   };
 
   return (
@@ -79,7 +90,7 @@ export default function Mnemonic() {
         <Button
           theme="primary"
           width="100%"
-          onPress={() => router.push("/(onboarding)/mnemonic/protect-config")}
+          onPress={toBiometrics}
         >
           {t("common.next")}
         </Button>
