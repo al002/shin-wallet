@@ -28,7 +28,6 @@ export default function RootLayout() {
   useEffect(() => {
     const assetsReady = fontsLoaded || fontsError;
     const isAppReady = assetsReady && isHydrated;
-    console.log(isHydrated, 'isHydrated')
 
     if (!isAppReady) {
       return;
@@ -78,6 +77,7 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="unlock" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style="light" />
       </ThemeProvider>

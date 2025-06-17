@@ -1,23 +1,25 @@
 import { Button } from "@/components/Button";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { H2, Paragraph, Switch, Text, XStack, YStack } from "tamagui";
-import Keychain from "react-native-keychain";
-import * as LocalAuthentication from "expo-local-authentication";
-import * as SecureStore from "expo-secure-store";
-import { useRouter } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   MNEMONIC_SECURE_STORE_KEY,
   WALLET_SETUP_COMPLETED_KEY,
   WALLLET_BIOMETRICS_ENABLED_KEY,
 } from "@/constants/wallet";
 import { useOnboardingContext } from "@/contexts/onboarding";
+import { useWalletStore } from "@/store/wallet";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as LocalAuthentication from "expo-local-authentication";
+import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Keychain from "react-native-keychain";
+import { H2, Paragraph, Switch, Text, XStack, YStack } from "tamagui";
 
 export default function Biometrics() {
   const { t } = useTranslation();
   const router = useRouter();
   const onboardingContext = useOnboardingContext();
+  const { checkAndHydrate } = useWalletStore();
 
   const [isBiometricsOn, setIsBiometricsOn] = useState(false);
   const [isHardwareSupported, setIsHardwareSupported] = useState(false);
@@ -75,6 +77,7 @@ export default function Biometrics() {
       }
 
       await SecureStore.setItemAsync(WALLET_SETUP_COMPLETED_KEY, "true");
+      await checkAndHydrate();
       onboardingContext.tempMnemonic = "";
       router.replace("/(tabs)/wallet");
     } catch (error) {
