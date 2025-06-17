@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { useTheme } from "tamagui";
-import { OnboardingContext } from "./context";
+import { OnboardingContext } from "@/contexts/onboarding";
 
 if (global.crypto == null) {
   global.crypto = require("expo-crypto");

@@ -7,12 +7,12 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useOnboardingContext } from "../context";
 import {
   MNEMONIC_SECURE_STORE_KEY,
   WALLET_SETUP_COMPLETED_KEY,
   WALLLET_BIOMETRICS_ENABLED_KEY,
 } from "@/constants/wallet";
+import { useOnboardingContext } from "@/contexts/onboarding";
 
 export default function Biometrics() {
   const { t } = useTranslation();
@@ -34,13 +34,6 @@ export default function Biometrics() {
     try {
       if (!checked) {
         setIsBiometricsOn(false);
-        return;
-      }
-
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-
-      if (isEnrolled) {
-        setIsBiometricsOn(true);
         return;
       }
 

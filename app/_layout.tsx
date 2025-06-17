@@ -28,6 +28,7 @@ export default function RootLayout() {
   useEffect(() => {
     const assetsReady = fontsLoaded || fontsError;
     const isAppReady = assetsReady && isHydrated;
+    console.log(isHydrated, 'isHydrated')
 
     if (!isAppReady) {
       return;

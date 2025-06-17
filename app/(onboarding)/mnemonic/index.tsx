@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { H2, Input, Paragraph, XStack, YStack } from "tamagui";
 import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
-import { useOnboardingContext } from "../context";
+import { useOnboardingContext } from "@/contexts/onboarding";
 
 export default function Mnemonic() {
   const { t } = useTranslation();
