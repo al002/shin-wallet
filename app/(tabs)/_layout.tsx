@@ -14,7 +14,12 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: theme.backgroundStrong.val,
           borderTopWidth: 0,
+          height: 64,
         },
+        tabBarItemStyle: {
+          paddingTop: 8,
+        },
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen

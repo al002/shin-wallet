@@ -64,7 +64,8 @@ export default function Biometrics() {
         MNEMONIC_SECURE_STORE_KEY,
         onboardingContext.tempMnemonic,
         {
-          accessControl: Keychain.ACCESS_CONTROL.USER_PRESENCE,
+          accessControl:
+            Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
           accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
           storage: Keychain.STORAGE_TYPE.RSA,
         },
