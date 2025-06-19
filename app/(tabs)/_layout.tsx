@@ -12,7 +12,7 @@ export default function TabsLayout() {
         tabBarActiveTintColor: theme.primary.val,
         tabBarInactiveTintColor: theme.colorMuted.val,
         tabBarStyle: {
-          backgroundColor: theme.backgroundStrong.val,
+          backgroundColor: theme.background.val,
           borderTopWidth: 0,
           height: 64,
         },
