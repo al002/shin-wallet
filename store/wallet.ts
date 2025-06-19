@@ -1,47 +1,64 @@
 import { create } from "zustand";
 import * as SecureStore from "expo-secure-store";
 import {
-  WALLET_SETUP_COMPLETED_KEY,
+  ACTIVE_WALLET_ID_KEY,
+  WALLET_METADATA_STORAGE_KEY,
   WALLLET_BIOMETRICS_ENABLED_KEY,
 } from "@/constants/wallet";
+import { ShinWallet } from "@/types/wallet";
 
 interface WalletState {
   isHydrated: boolean;
-  hasWallet: boolean;
   isUnlocked: boolean;
   isBiometricsEnabled: boolean;
+  wallets: ShinWallet[];
+  activeWalletId: string | null;
   checkAndHydrate: () => Promise<void>;
-  setHasWallet: (status: boolean) => void;
   setUnlocked: (status: boolean) => void;
+  setWallets: (wallets: ShinWallet[]) => void;
+  setActiveWalletId: (id: string | null) => void;
 }
 
 export const useWalletStore = create<WalletState>((set) => ({
   isHydrated: false,
-  hasWallet: false,
   isUnlocked: false,
   isBiometricsEnabled: false,
-  setHasWallet: (status) => set({ hasWallet: status }),
+  wallets: [],
+  activeWalletId: null,
   setUnlocked: (status) => set({ isUnlocked: status }),
+  setWallets: (wallets) => set({ wallets: wallets }),
+  setActiveWalletId: (id) => set({ activeWalletId: id }),
   checkAndHydrate: async () => {
+    let finalState: Partial<WalletState> = {}
+
     try {
-      const [isSetup, biometricsEnabled] = await Promise.all([
-        SecureStore.getItemAsync(WALLET_SETUP_COMPLETED_KEY),
+      const [biometricsEnabled, walletsJson, activeId] = await Promise.all([
         SecureStore.getItemAsync(WALLLET_BIOMETRICS_ENABLED_KEY),
+        SecureStore.getItemAsync(WALLET_METADATA_STORAGE_KEY),
+        SecureStore.getItemAsync(ACTIVE_WALLET_ID_KEY),
       ]);
 
-      const hasWallet = isSetup === "true";
+      const wallets: ShinWallet[] = walletsJson ? JSON.parse(walletsJson) : [];
+
+      const hasWallet = wallets.length > 0;
       const isBiometricsEnabled = biometricsEnabled === "true";
 
-      set({
-        hasWallet,
+      finalState = {
+        wallets: wallets,
+        activeWalletId: activeId,
         isBiometricsEnabled,
         isUnlocked: hasWallet && !isBiometricsEnabled,
-      });
+      };
     } catch (e) {
       console.error("Failed to check wallet status from secure store", e);
-      set({ hasWallet: false, isUnlocked: false, isBiometricsEnabled: false });
+      finalState = {
+        wallets: [],
+        activeWalletId: null,
+        isUnlocked: false,
+        isBiometricsEnabled: false,
+      };
     } finally {
-      set({ isHydrated: true });
+      set({ ...finalState, isHydrated: true });
     }
   },
 }));

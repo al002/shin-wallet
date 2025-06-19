@@ -13,8 +13,10 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const segments = useSegments();
   const router = useRouter();
-  const { isHydrated, hasWallet, isUnlocked, checkAndHydrate } =
+  const { isHydrated, isUnlocked, wallets, checkAndHydrate } =
     useWalletStore();
+
+  const hasWallet = wallets.length > 0;
 
   const [fontsLoaded, fontsError] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),

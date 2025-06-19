@@ -4,18 +4,29 @@ import { YStack } from "tamagui";
 import Keychain from "react-native-keychain";
 import { useWalletStore } from "@/store/wallet";
 import { useEffect } from "react";
+import { useRouter } from "expo-router";
 
 export default function AppUnlock() {
   const { t } = useTranslation();
-  const { setUnlocked } = useWalletStore();
+  const router = useRouter();
+  const { setUnlocked, activeWalletId } = useWalletStore();
 
   useEffect(() => {
-    handleUnlock();
-  }, []);
+    if (activeWalletId) {
+      handleUnlock();
+    }
+  }, [activeWalletId]);
 
   const handleUnlock = async () => {
+    if (!activeWalletId) {
+      console.error("Unlock attempt failed: No active account id found.")
+      router.replace("/(onboarding)");
+      return;
+    }
+
     try {
       const credentials = await Keychain.getGenericPassword({
+        service: activeWalletId,
         accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
       });
 

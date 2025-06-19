@@ -1,11 +1,14 @@
 import { Button } from "@/components/Button";
 import {
-  MNEMONIC_SECURE_STORE_KEY,
-  WALLET_SETUP_COMPLETED_KEY,
+  ACTIVE_WALLET_ID_KEY,
+  WALLET_METADATA_STORAGE_KEY,
+  WALLET_MNEMONIC_STORAGE_KEY,
   WALLLET_BIOMETRICS_ENABLED_KEY,
 } from "@/constants/wallet";
 import { useOnboardingContext } from "@/contexts/onboarding";
 import { useWalletStore } from "@/store/wallet";
+import { ShinAccount, ShinWallet } from "@/types/wallet";
+import { deriveEvmAccountFromMnemonic } from "@/utils/wallet";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as LocalAuthentication from "expo-local-authentication";
 import { useRouter } from "expo-router";
@@ -53,23 +56,50 @@ export default function Biometrics() {
   };
 
   const handleFinishSetup = async () => {
-    if (!onboardingContext.tempMnemonic) {
+    const mnemonic = onboardingContext.tempMnemonic;
+    if (!mnemonic) {
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await Keychain.setGenericPassword(
-        MNEMONIC_SECURE_STORE_KEY,
-        onboardingContext.tempMnemonic,
-        {
-          accessControl:
-            Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
-          accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-          storage: Keychain.STORAGE_TYPE.RSA,
-        },
+      const existingWalletsJson = await SecureStore.getItemAsync(
+        WALLET_METADATA_STORAGE_KEY,
       );
+      const wallets: ShinWallet[] = existingWalletsJson
+        ? JSON.parse(existingWalletsJson)
+        : [];
+
+      const derivedAccount = deriveEvmAccountFromMnemonic(mnemonic);
+      const evmAccount: ShinAccount = {
+        address: derivedAccount.address,
+        index: 0,
+      };
+
+      const newWalletId = `wallet_${Date.now()}`;
+      const newWallet: ShinWallet = {
+        id: newWalletId,
+        name: `Account ${wallets.length + 1}`,
+        type: "mnemonic",
+        createdAt: Date.now(),
+        accounts: [evmAccount],
+      };
+
+      await Keychain.setGenericPassword(WALLET_MNEMONIC_STORAGE_KEY, mnemonic, {
+        service: newWalletId,
+        accessControl:
+          Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        storage: Keychain.STORAGE_TYPE.RSA,
+      });
+
+      const updatedWallets = [...wallets, newWallet];
+      await SecureStore.setItemAsync(
+        WALLET_METADATA_STORAGE_KEY,
+        JSON.stringify(updatedWallets),
+      );
+      await SecureStore.setItemAsync(ACTIVE_WALLET_ID_KEY, newWalletId);
 
       if (isBiometricsOn && isHardwareSupported) {
         await SecureStore.setItemAsync(WALLLET_BIOMETRICS_ENABLED_KEY, "true");
@@ -77,7 +107,6 @@ export default function Biometrics() {
         await SecureStore.deleteItemAsync(WALLLET_BIOMETRICS_ENABLED_KEY);
       }
 
-      await SecureStore.setItemAsync(WALLET_SETUP_COMPLETED_KEY, "true");
       await checkAndHydrate();
       onboardingContext.tempMnemonic = "";
       router.replace("/(tabs)/wallet");
