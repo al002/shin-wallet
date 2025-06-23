@@ -1,4 +1,4 @@
-import { createEvmAdapter } from "./evm/client";
+import { createEvmClient } from "./evm/client";
 import {
   ClientCreatorFn,
   ChainType,
@@ -7,12 +7,12 @@ import {
 } from "./types";
 
 const adapterCreators: Record<ChainType, ClientCreatorFn> = {
-  evm: createEvmAdapter,
+  evm: createEvmClient,
 };
 
 const adapterCache = new Map<string, IBlockchainClient>();
 
-export const getBlockchainAdapter = (
+export const getBlockchainClient = (
   chainType: ChainType,
   network: Network = "mainnet",
 ): IBlockchainClient => {
