@@ -6,30 +6,35 @@ import {
   WALLLET_BIOMETRICS_ENABLED_KEY,
 } from "@/constants/wallet";
 import { ShinWallet } from "@/types/wallet";
+import { ChainType } from "@/services/blockchain/types";
 
 interface WalletState {
   isHydrated: boolean;
   isUnlocked: boolean;
   isBiometricsEnabled: boolean;
+  activeChainType: ChainType;
   wallets: ShinWallet[];
   activeWalletId: string | null;
   checkAndHydrate: () => Promise<void>;
   setUnlocked: (status: boolean) => void;
   setWallets: (wallets: ShinWallet[]) => void;
   setActiveWalletId: (id: string | null) => void;
+  setActiveChainType: (chain: ChainType) => void;
 }
 
 export const useWalletStore = create<WalletState>((set) => ({
   isHydrated: false,
   isUnlocked: false,
   isBiometricsEnabled: false,
+  activeChainType: "evm",
   wallets: [],
   activeWalletId: null,
   setUnlocked: (status) => set({ isUnlocked: status }),
   setWallets: (wallets) => set({ wallets: wallets }),
   setActiveWalletId: (id) => set({ activeWalletId: id }),
+  setActiveChainType: (chain) => set({ activeChainType: chain }),
   checkAndHydrate: async () => {
-    let finalState: Partial<WalletState> = {}
+    let finalState: Partial<WalletState> = {};
 
     try {
       const [biometricsEnabled, walletsJson, activeId] = await Promise.all([
