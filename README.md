@@ -50,6 +50,11 @@ Follow these steps to get the project running on your local machine.
     ```
     This will start the Expo development server. You can then scan the QR code with the Expo Go app on your phone or run it in a simulator.
 
+4.  **Windows Firewall**
+    ```powershell
+    New-NetFirewallRule -DisplayName "Expo Metro (8081)" -Direction Inbound -Protocol TCP -LocalPort 8081 -Action Allow
+    ```
+
 ## 📂 Project Structure
 
 Here is a brief overview of the key directories in this project:
